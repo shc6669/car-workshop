@@ -186,4 +186,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('activity/user/{user}/log', 'Users\ActivityController@index')->name('activity.user')
         ->middleware('permission:users.activity');
+
+    /**
+     * Car Route
+     */
 });
