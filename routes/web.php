@@ -188,6 +188,23 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         ->middleware('permission:users.activity');
 
     /**
-     * Car Route
+     * Master Data
      */
+    Route::group(['prefix' => 'master-data', 'namespace' => 'MasterData'], function () {
+        Route::resource('cars', 'CarsController')->except('show');
+        Route::get('cars/tbcars', [
+            'as' => 'get.cars',
+            'uses' => 'CarsController@getCars'
+        ]);
+        Route::resource('mechanics', 'MechanicsController')->except('show');
+        Route::get('mechanics/tbmechanics', [
+            'as' => 'get.mechanics',
+            'uses' => 'MechanicsController@getMechanics'
+        ]);
+        Route::resource('services', 'ServicesController')->except('show');
+        Route::get('services/tbservices', [
+            'as' => 'get.services',
+            'uses' => 'ServicesController@getServices'
+        ]);
+    });
 });

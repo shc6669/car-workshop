@@ -11,6 +11,7 @@ use Vanguard\Support\Plugins\Dashboard\Widgets\TotalUsers;
 use Vanguard\Support\Plugins\Dashboard\Widgets\UnconfirmedUsers;
 use Vanguard\Support\Plugins\Dashboard\Widgets\UserActions;
 use \Vanguard\UserActivity\Widgets\ActivityWidget;
+use Vanguard\Support\Plugins\MasterData;
 
 class VanguardServiceProvider extends BaseVanguardServiceProvider
 {
@@ -23,6 +24,8 @@ class VanguardServiceProvider extends BaseVanguardServiceProvider
     {
         return [
             \Vanguard\Support\Plugins\Dashboard\Dashboard::class,
+            /* Master Data */
+            MasterData::class,
             \Vanguard\Support\Plugins\Users::class,
             \Vanguard\UserActivity\UserActivity::class,
             \Vanguard\Support\Plugins\RolesAndPermissions::class,
