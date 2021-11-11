@@ -14,7 +14,7 @@ class CarsCreatedUpdatedRequest extends Request
     public function rules()
     {
         return [
-            'user_id' => 'required|unique:m_cars,user_id'
+            'user_id' => 'required|unique:m_cars_owner,user_id'
         ];
     }
 
