@@ -9,7 +9,7 @@ class MServices extends Model
 {
     use HasFactory;
 
-    protected $table = "m_cars";
+    protected $table = "m_services";
 
     protected $fillable = ['name', 'price'];
 

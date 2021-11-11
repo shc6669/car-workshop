@@ -4,7 +4,8 @@ namespace Vanguard\Http\Controllers\Web\MasterData;
 
 use Illuminate\Support\Arr;
 use Vanguard\Http\Controllers\Controller;
-use Vanguard\Http\Requests\MasterData\MechanicsCreatedUpdatedRequest;
+use Vanguard\Http\Requests\MasterData\MechanicsCreatedRequest;
+use Vanguard\Http\Requests\MasterData\MechanicsUpdatedRequest;
 use Vanguard\MMechanics;
 use DataTables;
 use Hash;
@@ -61,7 +62,7 @@ class MechanicsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MechanicsCreatedUpdatedRequest $request)
+    public function store(MechanicsCreatedRequest $request)
     {
         $inputs = $request->all();
         $inputs['password'] = Hash::make($inputs['password']);
@@ -92,7 +93,7 @@ class MechanicsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(MechanicsCreatedUpdatedRequest $request, $id)
+    public function update(MechanicsUpdatedRequest $request, $id)
     {
         $inputs = $request->all();
         if(!empty($inputs['password']))

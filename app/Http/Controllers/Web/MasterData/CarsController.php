@@ -4,7 +4,8 @@ namespace Vanguard\Http\Controllers\Web\MasterData;
 
 use Illuminate\Support\Arr;
 use Vanguard\Http\Controllers\Controller;
-use Vanguard\Http\Requests\MasterData\CarsCreatedUpdatedRequest;
+use Vanguard\Http\Requests\MasterData\CarsCreatedRequest;
+use Vanguard\Http\Requests\MasterData\CarsUpdatedRequest;
 use Vanguard\MCars;
 use DataTables;
 use Hash;
@@ -61,7 +62,7 @@ class CarsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CarsCreatedUpdatedRequest $request)
+    public function store(CarsCreatedRequest $request)
     {
         $inputs = $request->all();
         $inputs['password'] = Hash::make($inputs['password']);
@@ -92,7 +93,7 @@ class CarsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CarsCreatedUpdatedRequest $request, $id)
+    public function update(CarsUpdatedRequest $request, $id)
     {
         $inputs = $request->all();
         if(!empty($inputs['password']))

@@ -15,6 +15,7 @@ use Vanguard\Http\Requests\Auth\LoginRequest;
 use Vanguard\Repositories\User\UserRepository;
 use Vanguard\Services\Auth\ThrottlesLogins;
 use Vanguard\Services\Auth\TwoFactor\Contracts\Authenticatable;
+use Toastr;
 
 class LoginController extends Controller
 {
@@ -117,6 +118,8 @@ class LoginController extends Controller
             return redirect()->to($request->get('to'));
         }
 
+        Toastr::success('Glad to see you','Welcome '.$user->first_name.' '.$user->last_name.'');
+
         return redirect()->intended();
     }
 
@@ -144,6 +147,8 @@ class LoginController extends Controller
         event(new LoggedOut);
 
         Auth::logout();
+
+        Toastr::info('Goodbye', 'Logout Success!');
 
         return redirect('login');
     }

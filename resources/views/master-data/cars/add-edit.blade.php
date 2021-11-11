@@ -52,7 +52,7 @@
                            class="form-control input-solid"
                            id="password"
                            name="password"
-                           @if ($edit) placeholder="@lang("Leave field blank if you don't want to change it")" @endif>
+                           @if($edit) placeholder="@lang("Leave field blank if you don't want to change it")" @endif>
                 </div>
                 <div class="form-group">
                     <label for="password_confirmation">{{ $edit ? __("Confirm New Password") : __('Confirm Password') }}</label>
@@ -60,7 +60,7 @@
                            class="form-control input-solid"
                            id="password_confirmation"
                            name="password_confirmation"
-                           @if ($edit) placeholder="@lang("Leave field blank if you don't want to change it")" @endif>
+                           @if($edit) placeholder="@lang("Leave field blank if you don't want to change it")" @endif>
                 </div>
             </div>
         </div>
@@ -80,5 +80,9 @@
 @stop
 
 @section('scripts')
-    {!! JsValidator::formRequest('Vanguard\Http\Requests\MasterData\CarsCreatedUpdatedRequest', '#car-form') !!}
+    @if($edit)
+    {!! JsValidator::formRequest('Vanguard\Http\Requests\MasterData\CarsUpdatedRequest', '#car-form') !!}
+    @else
+    {!! JsValidator::formRequest('Vanguard\Http\Requests\MasterData\CarsCreatedRequest', '#car-form') !!}
+    @endif
 @stop

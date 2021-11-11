@@ -15,16 +15,26 @@ class ServicesController extends Controller
         $this->middleware('permission:master-data.manage');
     }
 
-    public function getservices()
+    public function getServices()
     {
-        $services = MServices::get();
+        $queries = MServices::get();
+
+        $services = [];
+        foreach($queries as $query)
+        {
+            $services[] = [
+                'id'    => $query->id,
+                'name'  => $query->name,
+                'price' => 'Rp '.$query->price
+            ];
+        }
 
         return DataTables::of($services)
         ->addIndexColumn()
         ->addColumn('action', function($services) {
             $edit = '
-                <a data-toggle="tooltip" title="Edit Data" href="'.route('services.edit',['service' => $services->id]).'" class="btn btn-outline-info btn-sm"><i class="fas fa-edit"></i></a>
-                <a data-toggle="tooltip" data-placement="top" data-method="DELETE" data-confirm-title="Confirm" data-confirm-text="Are you sure to delete this data?" data-confirm-delete="Delete" title="Delete" href="'.route('services.destroy',['service' => $services->id]).'" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></a>
+                <a data-toggle="tooltip" title="Edit Data" href="'.route('services.edit',['service' => $services['id']]).'" class="btn btn-outline-info btn-sm"><i class="fas fa-edit"></i></a>
+                <a data-toggle="tooltip" data-placement="top" data-method="DELETE" data-confirm-title="Confirm" data-confirm-text="Are you sure to delete this data?" data-confirm-delete="Delete" title="Delete" href="'.route('services.destroy',['service' => $services['id']]).'" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></a>
             ';
             return $edit;
         })

@@ -4,7 +4,7 @@ namespace Vanguard\Http\Requests\MasterData;
 
 use Vanguard\Http\Requests\Request;
 
-class CarsCreatedUpdatedRequest extends Request
+class MechanicsCreatedRequest extends Request
 {
     /**
      * Get the validation rules that apply to the request.

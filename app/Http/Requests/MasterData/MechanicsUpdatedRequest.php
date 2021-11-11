@@ -4,7 +4,7 @@ namespace Vanguard\Http\Requests\MasterData;
 
 use Vanguard\Http\Requests\Request;
 
-class MechanicsCreatedUpdatedRequest extends Request
+class MechanicsUpdatedRequest extends Request
 {
     /**
      * Get the validation rules that apply to the request.
@@ -15,8 +15,7 @@ class MechanicsCreatedUpdatedRequest extends Request
     {
         return [
             'name'      => 'required',
-            'email'     => 'required|email',
-            'password'  => 'required|min:6|confirmed',
+            'email'     => 'required|email'
         ];
     }
 }
