@@ -35,7 +35,8 @@
                             <tr>
                                 <th></th>
                                 <th class="min-width-80">@lang('Owners Name')</th>
-                                <th class="min-width-80">@lang('Owners Email')</th>
+                                <th class="min-width-80">@lang('Cars Name')</th>
+                                <th class="min-width-80">@lang('Licence Plate')</th>
                                 <th class="min-width-90">@lang('Action')</th>
                             </tr>
                         </thead>
@@ -57,7 +58,8 @@
         TableColumns = [
             {data: "DT_RowIndex", orderable:false, filter: false, searchable: false},
             {data: "name", name:"name", orderable:false, filter: false},
-            {data: "email", name:"email", orderable:false, filter: false},
+            {data: "type", name:"type", orderable:false, filter: false},
+            {data: "licence_plate", name:"licence_plate", orderable:false, filter: false},
             {data: "action", name: "action",orderable: false, searchable: false}
         ];
 

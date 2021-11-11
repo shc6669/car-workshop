@@ -14,15 +14,19 @@ class CarsCreatedUpdatedRequest extends Request
     public function rules()
     {
         return [
-            'user_id' => 'required|unique:m_cars_owner,user_id'
+            'licence_plate' => 'required|unique:m_cars,licence_plate',
+            'name'          => 'required',
+            'user_id'       => 'required'
         ];
     }
 
     public function messages()
     {
         return [
-            'user_id.required'  => 'Car owner is required',
-            'user_id.unique'    => 'This car owner has already selected. Please select other'
+            'licence_plate.required'    => 'Licence plate is required',
+            'licence_plate.unique'      => 'This licence plate has already registered to system, please input others',
+            'name.required'             => 'Car name is required',
+            'user_id.required'          => 'Car owner is required'
         ];
     }
 }

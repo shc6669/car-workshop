@@ -37,6 +37,16 @@
             </div>
             <div class="col-md-9">
                 <div class="form-group">
+                    <label for="name">@lang('Car Name')</label>
+                    <input type="text" class="form-control" id="name"
+                           name="name" placeholder="@lang('Please input car name')" value="{{ $edit ? $car->name : old('name') }}">
+                </div>
+                <div class="form-group">
+                    <label for="licence_plate">@lang('Licence Plate')</label>
+                    <input type="text" class="form-control" id="licence_plate"
+                           name="licence_plate" placeholder="@lang('Please input licence plate')" value="{{ $edit ? $car->licence_plate : old('licence_plate') }}">
+                </div>
+                <div class="form-group">
                     <label for="user_id">@lang('Name')</label>
                     <select class="form-control input-solid" id="user_id" name="user_id">
                         <option></option>

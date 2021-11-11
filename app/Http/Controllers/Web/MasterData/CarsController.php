@@ -24,9 +24,10 @@ class CarsController extends Controller
         foreach($queries as $query)
         {
             $cars[] = [
-                'id'    => $query->id,
-                'name'  => $query->user->first_name.' '.$query->user->last_name,
-                'email' => $query->user->email
+                'id'            => $query->id,
+                'name'          => $query->user->first_name.' '.$query->user->last_name,
+                'type'          => $query->name,
+                'licence_plate' => $query->licence_plate
             ];
         }
 

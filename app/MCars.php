@@ -9,9 +9,9 @@ class MCars extends Model
 {
     use HasFactory;
 
-    protected $table = "m_cars_owner";
+    protected $table = "m_cars";
 
-    protected $fillable = ['user_id'];
+    protected $fillable = ['licence_plate', 'name', 'status', 'user_id'];
 
     protected $guarded = [];
 
