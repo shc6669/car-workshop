@@ -2,13 +2,11 @@
 
 namespace Vanguard\Http\Controllers\Web\MasterData;
 
-use Illuminate\Support\Arr;
 use Vanguard\Http\Controllers\Controller;
-use Vanguard\Http\Requests\MasterData\CarsCreatedRequest;
-use Vanguard\Http\Requests\MasterData\CarsUpdatedRequest;
+use Vanguard\Http\Requests\MasterData\CarsCreatedUpdatedRequest;
 use Vanguard\MCars;
+use Vanguard\User;
 use DataTables;
-use Hash;
 
 class CarsController extends Controller
 {
@@ -20,14 +18,24 @@ class CarsController extends Controller
 
     public function getCars()
     {
-        $cars = MCars::get();
+        $queries = MCars::with('user:id,first_name,last_name,email')->get();
+
+        $cars = [];
+        foreach($queries as $query)
+        {
+            $cars[] = [
+                'id'    => $query->id,
+                'name'  => $query->user->first_name.' '.$query->user->last_name,
+                'email' => $query->user->email
+            ];
+        }
 
         return DataTables::of($cars)
         ->addIndexColumn()
         ->addColumn('action', function($cars) {
             $edit = '
-                <a data-toggle="tooltip" title="Edit Data" href="'.route('cars.edit',['car' => $cars->id]).'" class="btn btn-outline-info btn-sm"><i class="fas fa-edit"></i></a>
-                <a data-toggle="tooltip" data-placement="top" data-method="DELETE" data-confirm-title="Confirm" data-confirm-text="Are you sure to delete this data?" data-confirm-delete="Delete" title="Delete" href="'.route('cars.destroy',['car' => $cars->id]).'" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></a>
+                <a data-toggle="tooltip" title="Edit Data" href="'.route('cars.edit',['car' => $cars['id']]).'" class="btn btn-outline-info btn-sm"><i class="fas fa-edit"></i></a>
+                <a data-toggle="tooltip" data-placement="top" data-method="DELETE" data-confirm-title="Confirm" data-confirm-text="Are you sure to delete this data?" data-confirm-delete="Delete" title="Delete" href="'.route('cars.destroy',['car' => $cars['id']]).'" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></a>
             ';
             return $edit;
         })
@@ -52,8 +60,11 @@ class CarsController extends Controller
     public function create()
     {
         $edit = false;
+        $users = User::select('id', 'first_name', 'last_name')
+                ->where('role_id', 2)
+                ->get();
 
-        return view('master-data.cars.add-edit', compact('edit'));
+        return view('master-data.cars.add-edit', compact('edit', 'users'));
     }
 
     /**
@@ -62,10 +73,9 @@ class CarsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CarsCreatedRequest $request)
+    public function store(CarsCreatedUpdatedRequest $request)
     {
         $inputs = $request->all();
-        $inputs['password'] = Hash::make($inputs['password']);
         MCars::create($inputs);
 
         return redirect()->route('cars.index')
@@ -82,8 +92,11 @@ class CarsController extends Controller
     {
         $edit = true;
         $car = MCars::findOrFail($id);
+        $users = User::select('id', 'first_name', 'last_name')
+                ->where('role_id', 2)
+                ->get();
 
-        return view('master-data.cars.add-edit', compact('car', 'edit'));
+        return view('master-data.cars.add-edit', compact('car', 'edit', 'users'));
     }
 
     /**
@@ -93,18 +106,9 @@ class CarsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CarsUpdatedRequest $request, $id)
+    public function update(CarsCreatedUpdatedRequest $request, $id)
     {
         $inputs = $request->all();
-        if(!empty($inputs['password']))
-        {
-            $inputs['password'] = Hash::make($inputs['password']);
-        }
-        else
-        {
-            $inputs = Arr::except($inputs, ['password']);
-        }
-
         $car = MCars::find($id);
         $car->update($inputs);
 

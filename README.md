@@ -14,5 +14,5 @@
 - This backend feature also can use it to input the data as well.
 - The link for backend : http:localhost:8000/login
 - Use this credentials for admin role:
-- username: admin-backend
-- password: password123
+- username: admin
+- password: admin123

@@ -2,13 +2,11 @@
 
 namespace Vanguard\Http\Controllers\Web\MasterData;
 
-use Illuminate\Support\Arr;
 use Vanguard\Http\Controllers\Controller;
-use Vanguard\Http\Requests\MasterData\MechanicsCreatedRequest;
-use Vanguard\Http\Requests\MasterData\MechanicsUpdatedRequest;
+use Vanguard\Http\Requests\MasterData\MechanicsCreatedUpdatedRequest;
 use Vanguard\MMechanics;
+use Vanguard\User;
 use DataTables;
-use Hash;
 
 class MechanicsController extends Controller
 {
@@ -20,14 +18,24 @@ class MechanicsController extends Controller
 
     public function getMechanics()
     {
-        $mechanics = MMechanics::get();
+        $queries = MMechanics::with('user:id,first_name,last_name,email')->get();
+
+        $mechanics = [];
+        foreach($queries as $query)
+        {
+            $mechanics[] = [
+                'id'    => $query->id,
+                'name'  => $query->user->first_name.' '.$query->user->last_name,
+                'email' => $query->user->email
+            ];
+        }
 
         return DataTables::of($mechanics)
         ->addIndexColumn()
         ->addColumn('action', function($mechanics) {
             $edit = '
-                <a data-toggle="tooltip" title="Edit Data" href="'.route('mechanics.edit',['mechanic' => $mechanics->id]).'" class="btn btn-outline-info btn-sm"><i class="fas fa-edit"></i></a>
-                <a data-toggle="tooltip" data-placement="top" data-method="DELETE" data-confirm-title="Confirm" data-confirm-text="Are you sure to delete this data?" data-confirm-delete="Delete" title="Delete" href="'.route('mechanics.destroy',['mechanic' => $mechanics->id]).'" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></a>
+                <a data-toggle="tooltip" title="Edit Data" href="'.route('mechanics.edit',['mechanic' => $mechanics['id']]).'" class="btn btn-outline-info btn-sm"><i class="fas fa-edit"></i></a>
+                <a data-toggle="tooltip" data-placement="top" data-method="DELETE" data-confirm-title="Confirm" data-confirm-text="Are you sure to delete this data?" data-confirm-delete="Delete" title="Delete" href="'.route('mechanics.destroy',['mechanic' => $mechanics['id']]).'" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></a>
             ';
             return $edit;
         })
@@ -52,8 +60,11 @@ class MechanicsController extends Controller
     public function create()
     {
         $edit = false;
+        $users = User::select('id', 'first_name', 'last_name')
+                ->where('role_id', 3)
+                ->get();
 
-        return view('master-data.mechanics.add-edit', compact('edit'));
+        return view('master-data.mechanics.add-edit', compact('edit', 'users'));
     }
 
     /**
@@ -62,10 +73,9 @@ class MechanicsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MechanicsCreatedRequest $request)
+    public function store(MechanicsCreatedUpdatedRequest $request)
     {
         $inputs = $request->all();
-        $inputs['password'] = Hash::make($inputs['password']);
         MMechanics::create($inputs);
 
         return redirect()->route('mechanics.index')
@@ -82,8 +92,11 @@ class MechanicsController extends Controller
     {
         $edit = true;
         $mechanic = MMechanics::findOrFail($id);
+        $users = User::select('id', 'first_name', 'last_name')
+                ->where('role_id', 3)
+                ->get();
 
-        return view('master-data.mechanics.add-edit', compact('edit', 'mechanic'));
+        return view('master-data.mechanics.add-edit', compact('edit', 'mechanic', 'users'));
     }
 
     /**
@@ -93,18 +106,9 @@ class MechanicsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(MechanicsUpdatedRequest $request, $id)
+    public function update(MechanicsCreatedUpdatedRequest $request, $id)
     {
         $inputs = $request->all();
-        if(!empty($inputs['password']))
-        {
-            $inputs['password'] = Hash::make($inputs['password']);
-        }
-        else
-        {
-            $inputs = Arr::except($inputs, ['password']);
-        }
-
         $mechanic = MMechanics::find($id);
         $mechanic->update($inputs);
 

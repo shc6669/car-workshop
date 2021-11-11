@@ -11,7 +11,12 @@ class MMechanics extends Model
 
     protected $table = "m_mechanics";
 
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['user_id'];
 
     protected $guarded = [];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

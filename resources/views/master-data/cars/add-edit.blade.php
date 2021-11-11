@@ -37,30 +37,13 @@
             </div>
             <div class="col-md-9">
                 <div class="form-group">
-                    <label for="name">@lang('Name')</label>
-                    <input type="text" class="form-control" id="name"
-                           name="name" placeholder="@lang('Please input name')" value="{{ $edit ? $car->name : old('name') }}">
-                </div>
-                <div class="form-group">
-                    <label for="email">@lang('Email')</label>
-                    <input type="email" class="form-control" id="email"
-                           name="email" placeholder="@lang('Please input email')" value="{{ $edit ? $car->email : old('email') }}">
-                </div>
-                <div class="form-group">
-                    <label for="password">{{ $edit ? __("New Password") : __('Password') }}</label>
-                    <input type="password"
-                           class="form-control input-solid"
-                           id="password"
-                           name="password"
-                           @if($edit) placeholder="@lang("Leave field blank if you don't want to change it")" @endif>
-                </div>
-                <div class="form-group">
-                    <label for="password_confirmation">{{ $edit ? __("Confirm New Password") : __('Confirm Password') }}</label>
-                    <input type="password"
-                           class="form-control input-solid"
-                           id="password_confirmation"
-                           name="password_confirmation"
-                           @if($edit) placeholder="@lang("Leave field blank if you don't want to change it")" @endif>
+                    <label for="user_id">@lang('Name')</label>
+                    <select class="form-control input-solid" id="user_id" name="user_id">
+                        <option></option>
+                        @foreach($users as $user)
+                            <option value="{{$user->id}}" {{$edit && ($user->id == $car->user_id) ? 'selected': '' }}>{{$user->first_name}} {{$user->last_name}}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
         </div>
@@ -80,9 +63,10 @@
 @stop
 
 @section('scripts')
-    @if($edit)
-    {!! JsValidator::formRequest('Vanguard\Http\Requests\MasterData\CarsUpdatedRequest', '#car-form') !!}
-    @else
-    {!! JsValidator::formRequest('Vanguard\Http\Requests\MasterData\CarsCreatedRequest', '#car-form') !!}
-    @endif
+    {!! JsValidator::formRequest('Vanguard\Http\Requests\MasterData\CarsCreatedUpdatedRequest', '#car-form') !!}
+    <script>
+        $(document).ready(function() {
+            $("#user_id").select2({"allowClear":true,"placeholder":{"id":"","text":"{{ 'Please Select Option' }}"}});
+        });
+    </script>
 @stop

@@ -11,7 +11,12 @@ class MCars extends Model
 
     protected $table = "m_cars";
 
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['user_id', 'status'];
 
     protected $guarded = [];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
