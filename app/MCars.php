@@ -11,7 +11,7 @@ class MCars extends Model
 
     protected $table = "m_cars";
 
-    protected $fillable = ['licence_plate', 'name', 'status', 'user_id'];
+    protected $fillable = ['licence_plate', 'name', 'user_id'];
 
     protected $guarded = [];
 
