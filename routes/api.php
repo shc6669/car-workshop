@@ -62,4 +62,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/settings', 'SettingsController@index');
 
     Route::get('/countries', 'CountriesController@index');
+
+    Route::get('/listAll', 'RESTController@listAll');
 });
