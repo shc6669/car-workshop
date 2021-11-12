@@ -77,7 +77,6 @@
         </div>
     </div>
     <div class="card-footer text-muted">
-        {{-- {{date('d-m-Y', strtotime($order->start_at));}} --}}
         {{Carbon\Carbon::parse($order->start_at)->formatLocalized('%A, %d %B %Y')}}
     </div>
 </div>

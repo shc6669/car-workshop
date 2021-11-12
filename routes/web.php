@@ -220,4 +220,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         'as' => 'get.jobs',
         'uses' => 'JobsManagemenController@getJobs'
     ]);
+    Route::post('jobs/changeStatus/{job_id}', [
+        'as' => 'change.status',
+        'uses' => 'JobsManagemenController@changeStatus'
+    ]);
 });

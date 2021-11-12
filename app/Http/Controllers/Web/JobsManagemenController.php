@@ -5,6 +5,9 @@ namespace Vanguard\Http\Controllers\Web;
 use Illuminate\Http\Request;
 use Vanguard\Http\Controllers\Controller;
 use Vanguard\TJobs;
+use Vanguard\MMechanics;
+use Vanguard\TOrders;
+use Vanguard\TOrdersDetail;
 use DataTables;
 
 class JobsManagemenController extends Controller
@@ -60,6 +63,7 @@ class JobsManagemenController extends Controller
                         ->whereHas('mechanic.user', function($query) {
                             $query->where('user_id', auth()->user()->id);
                         })
+                        ->where('status', 1)
                         ->get();
 
             $jobs = [];
@@ -119,6 +123,34 @@ class JobsManagemenController extends Controller
      */
     public function show($id)
     {
-        //
+        $job = TJobs::find($id);
+        $order_details = TOrdersDetail::where('order_id', $job->order_id)
+                        ->with('service')
+                        ->get();
+
+        return view('jobs.show', compact('job', 'order_details'));
+    }
+
+    public function changeStatus($value)
+    {
+        // Change status on Job
+        $status_job = TJobs::find($value);
+        $status_job->status = 2;
+        $status_job->save();
+
+        // Change status on Order
+        $status_order = TOrders::find($status_job->order_id);
+        $status_order->status = 2;
+        $status_order->save();
+
+        // Change status on Mechanic
+        $status_id = MMechanics::find($status_job->mechanic_id);
+        $status_id->job_status = 0;
+        $status_id->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Success change status'
+        ]);
     }
 }
