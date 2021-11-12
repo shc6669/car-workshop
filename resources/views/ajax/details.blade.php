@@ -2,7 +2,7 @@
     <div class="col-md-3"></div>
     <div class="col-md-3">
         <div class="form-group">
-            <label for="service_id">@lang('Service')</label>
+            <label for="service_id{{ $index }}">@lang('Service')</label>
             <select class="form-control input-solid" id="service_id{{ $index }}" name="service_id[{{ $index }}]">
                 <option value=""></option>
                 @foreach($services as $key => $service)
@@ -13,13 +13,13 @@
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label for="qty">@lang('Qty')</label>
+            <label for="qty{{ $index }}">@lang('Qty')</label>
             <input type="number" class="form-control input-solid" id="qty{{ $index }}" name="qty[{{ $index }}]">
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            <label for="notes">@lang('Notes')</label>
+            <label for="notes{{ $index }}">@lang('Notes')</label>
             <input type="text" class="form-control input-solid" id="notes{{ $index }}" name="notes[{{ $index }}]">
         </div>
     </div>

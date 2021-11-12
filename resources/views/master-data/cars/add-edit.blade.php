@@ -32,7 +32,9 @@
                     @lang('Cars Owner')
                 </h5>
                 <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="tooltip" title="Back" onclick="window.location.href='{{ route('cars.index') }}'">
-                    <i class="fa fa-arrow-left"></i> Back
+                    <span>
+                        <i class="fa fa-arrow-left"></i> Back
+                    </span>
                 </button>
             </div>
             <div class="col-md-9">
@@ -60,7 +62,7 @@
         <div class="row pt-sm-4">
             <div class="col-md-3"></div>
             <div class="col-md-9">
-                <button type="submit" class="btn btn-outline-primary">
+                <button type="submit" class="btn btn-outline-success">
                     {{ $edit ? 'Update data' : 'Submit data' }}
                 </button>
             </div>

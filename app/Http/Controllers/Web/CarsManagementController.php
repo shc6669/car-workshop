@@ -201,11 +201,11 @@ class CarsManagementController extends Controller
     public function show($id)
     {
         $order = TOrders::find($id);
-        $order_detail = TOrdersDetail::whereOrderId($id)
+        $order_details = TOrdersDetail::whereOrderId($id)
                         ->with('service')
                         ->get();
 
-        return view('orders.show', compact('order', 'order_detail'));
+        return view('orders.show', compact('order', 'order_details'));
     }
 
     /**
@@ -219,11 +219,18 @@ class CarsManagementController extends Controller
         $edit = true;
         $cars = MCars::with('user:id,first_name,last_name,email')->get();
         $order = TOrders::findOrFail($id);
-        $order_detail = TOrdersDetail::whereOrderId($id)
+        $order_details = TOrdersDetail::whereOrderId($id)
                         ->with('service')
                         ->get();
+        $jobs = TJobs::whereOrderId($id)->first();
 
-        return view('orders.add-edit', compact('cars', 'edit', 'order', 'order_detail'));
+        foreach($order_details as $key => $value)
+        {
+            $value->serviceType = $value->service->pluck('name', 'id')->toArray();
+            unset($value->service);
+        }
+
+        return view('orders.add-edit', compact('cars', 'edit', 'order', 'order_details', 'jobs'));
     }
 
     /**
@@ -236,7 +243,31 @@ class CarsManagementController extends Controller
     public function update(UpdateRequest $request, $id)
     {
         $inputs = $request->all();
+
         $order = TOrders::find($id);
+        $order->car_id      = $inputs['car_id'];
+        $order->notes       = $inputs['notes_order'];
+        $order->start_at    = $inputs['start_at'];
+        $order->save();
+
+        // Update order details
+        if(!empty($inputs['service_id']))
+        {
+            $services = $inputs['service_id'];
+            TOrdersDetail::whereOrderId($id)->delete();
+            foreach($services as $k => $service)
+            {
+                $detail = new TOrdersDetail;
+                $detail->order_id   = $order->id;
+                $detail->service_id = $inputs['service_id'][$k];
+                $detail->qty        = $inputs['qty'][$k];
+                $detail->notes      = $inputs['notes'][$k];
+                $detail->save();
+            }
+        }
+
+        return redirect()->back()
+            ->withSuccess('Success updated data');
     }
 
     /**
@@ -248,9 +279,8 @@ class CarsManagementController extends Controller
     public function destroy($id)
     {
         $order = TOrders::findOrFail($id);
-        $order->delete();
-
         TOrdersDetail::whereOrderId($id)->delete();
+        $order->delete();
 
         return redirect()->route('orders.index')
             ->withSuccess('Data deleted!');
