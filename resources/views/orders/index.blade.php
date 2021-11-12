@@ -39,6 +39,7 @@
                                 <th class="min-width-80">@lang('Owners Name')</th>
                                 <th class="min-width-80">@lang('Cars Name')</th>
                                 <th class="min-width-80">@lang('Licence Plate')</th>
+                                <th class="min-width-80">@lang('Status')</th>
                                 <th class="min-width-90">@lang('Action')</th>
                             </tr>
                         </thead>
@@ -59,9 +60,10 @@
         DataTableElement = $('#orders-table-wrapper');
         TableColumns = [
             {data: "DT_RowIndex", orderable:false, filter: false, searchable: false},
-            {data: "name", name:"name", orderable:false, filter: false},
-            {data: "type", name:"type", orderable:false, filter: false},
+            {data: "car_owner", name:"car_owner", orderable:false, filter: false},
+            {data: "car_name", name:"car_name", orderable:false, filter: false},
             {data: "licence_plate", name:"licence_plate", orderable:false, filter: false},
+            {data: "car_status", name:"car_status", orderable:false, filter: false},
             {data: "action", name: "action",orderable: false, searchable: false}
         ];
 

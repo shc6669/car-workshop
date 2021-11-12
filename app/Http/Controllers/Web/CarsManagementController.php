@@ -28,36 +28,80 @@ class CarsManagementController extends Controller
     {
         if(auth()->user()->hasRole('Admin'))
         {
-            $orders = TOrders::with('cars')->get();
+            $queries = TOrders::with('car.user')->get();
+
+            $orders = [];
+            foreach($queries as $query)
+            {
+                $orders[] = [
+                    'id'            => $query->id,
+                    'licence_plate' => $query->car->licence_plate,
+                    'car_name'      => $query->car->name,
+                    'car_owner'     => $query->car->user->first_name.' '.$query->car->user->last_name,
+                    'car_status'    => $query->status
+                ];
+            }
 
             return DataTables::of($orders)
             ->addIndexColumn()
+            ->addColumn('car_status', function($orders) {
+                $array = [
+                    "1" => '<span class="badge badge-pill badge-info"> <i class="fas fa-exclamation-triangle"></i> Processing</span>',
+                    "2" => '<span class="badge badge-pill badge-success"> <i class="fas fa-check-square"></i> Completed</span>'
+                ];
+                $fa_active = @$array[$orders['car_status']] ?: null;
+
+                return $fa_active;
+            })
             ->addColumn('action', function($orders) {
                 $edit = '
-                    <a data-toggle="tooltip" title="Edit Data" href="'.route('orders.edit',['order' => $orders->id]).'" class="btn btn-outline-info btn-sm"><i class="fas fa-edit"></i></a>
-                    <a data-toggle="tooltip" data-placement="top" data-method="DELETE" data-confirm-title="Confirm" data-confirm-text="Are you sure to delete this data?" data-confirm-delete="Delete" title="Delete" href="'.route('orders.destroy',['order' => $orders->id]).'" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></a>
+                    <a data-toggle="tooltip" title="Edit Data" href="'.route('orders.edit',['order' => $orders['id']]).'" class="btn btn-outline-info btn-sm"><i class="fas fa-edit"></i></a>
+                    <a data-toggle="tooltip" data-placement="top" data-method="DELETE" data-confirm-title="Confirm" data-confirm-text="Are you sure to delete this data?" data-confirm-delete="Delete" title="Delete" href="'.route('orders.destroy',['order' => $orders['id']]).'" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></a>
                 ';
                 return $edit;
             })
-            ->make(true);
+            ->rawColumns(['car_status', 'action'])
+            ->toJson();
         }
         elseif(auth()->user()->hasRole('User'))
         {
-            $orders = TOrders::with('cars')
-                    ->whereHas('cars', function($query) {
+            $queries = TOrders::with('car.user')
+                    ->whereHas('car.user', function($query) {
                         $query->where('user_id', auth()->user()->id);
                     })
                     ->get();
 
+            $orders = [];
+            foreach($queries as $query)
+            {
+                $orders[] = [
+                    'id'            => $query->id,
+                    'licence_plate' => $query->car->licence_plate,
+                    'car_name'      => $query->car->name,
+                    'car_owner'     => $query->car->user->first_name.' '.$query->car->user->last_name,
+                    'car_status'    => $query->status
+                ];
+            }
+
             return DataTables::of($orders)
             ->addIndexColumn()
+            ->addColumn('car_status', function($orders) {
+                $array = [
+                    "1" => '<span class="badge badge-pill badge-info"> <i class="fas fa-exclamation-triangle"></i> Processing</span>',
+                    "2" => '<span class="badge badge-pill badge-success"> <i class="fas fa-check-square"></i> Completed</span>'
+                ];
+                $fa_active = @$array[$orders['car_status']] ?: null;
+
+                return $fa_active;
+            })
             ->addColumn('action', function($orders) {
                 $edit = '
-                    <a data-toggle="tooltip" title="View Data" href="'.route('orders.show',['order' => $orders->id]).'" class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i></a>
+                    <a data-toggle="tooltip" title="View Data" href="'.route('orders.show',['order' => $orders['id']]).'" class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i></a>
                 ';
                 return $edit;
             })
-            ->make(true);
+            ->rawColumns(['car_status', 'action'])
+            ->toJson();
         }
         else
         {
@@ -108,7 +152,7 @@ class CarsManagementController extends Controller
     {
         $inputs = $request->all();
         $mechanic = $inputs['mechanic_id'];
-        
+
         $order = new TOrders;
         $order->car_id      = $inputs['car_id'];
         $order->notes       = $inputs['notes_order'];

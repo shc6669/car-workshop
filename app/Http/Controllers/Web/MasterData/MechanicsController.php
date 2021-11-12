@@ -39,7 +39,8 @@ class MechanicsController extends Controller
             ';
             return $edit;
         })
-        ->make(true);
+        ->rawColumns(['action'])
+        ->toJson();
     }
 
     /**

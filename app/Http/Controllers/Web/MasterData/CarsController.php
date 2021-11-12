@@ -40,7 +40,8 @@ class CarsController extends Controller
             ';
             return $edit;
         })
-        ->make(true);
+        ->rawColumns(['action'])
+        ->toJson();
     }
 
     /**
