@@ -16,7 +16,7 @@
 
 @include('partials.messages')
 
-@if ($edit)
+@if($edit)
     {!! Form::open(['route' => ['services.update', $service->id], 'method' => 'PUT', 'id' => 'service-form']) !!}
 @else
     {!! Form::open(['route' => 'services.store', 'id' => 'service-form']) !!}

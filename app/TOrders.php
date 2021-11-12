@@ -15,7 +15,7 @@ class TOrders extends Model
 
     protected $guarded = [];
 
-    public function cars()
+    public function car()
     {
         return $this->belongsTo(MCars::class, 'car_id');
     }

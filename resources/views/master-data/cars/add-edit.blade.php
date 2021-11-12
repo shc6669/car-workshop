@@ -16,7 +16,7 @@
 
 @include('partials.messages')
 
-@if ($edit)
+@if($edit)
     {!! Form::open(['route' => ['cars.update', $car->id], 'method' => 'PUT', 'id' => 'car-form']) !!}
 @else
     {!! Form::open(['route' => 'cars.store', 'id' => 'car-form']) !!}
@@ -74,9 +74,5 @@
 
 @section('scripts')
     {!! JsValidator::formRequest('Vanguard\Http\Requests\MasterData\CarsCreatedUpdatedRequest', '#car-form') !!}
-    <script>
-        $(document).ready(function() {
-            $("#user_id").select2({"allowClear":true,"placeholder":{"id":"","text":"{{ 'Please Select Option' }}"}});
-        });
-    </script>
+    {!! HTML::script('assets/js/as/custom.js') !!}
 @stop

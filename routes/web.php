@@ -40,17 +40,14 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
-
     /**
      * Dashboard
      */
-
     Route::get('/', 'DashboardController@index')->name('dashboard');
 
     /**
      * User Profile
      */
-
     Route::group(['prefix' => 'profile', 'namespace' => 'Profile'], function () {
         Route::get('/', 'ProfileController@show')->name('profile');
         Route::get('activity', 'ActivityController@show')->name('profile.activity');
@@ -75,7 +72,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     /**
      * Two-Factor Authentication Setup
      */
-
     Route::group(['middleware' => 'two-factor'], function () {
         Route::post('two-factor/enable', 'TwoFactorController@enable')->name('two-factor.enable');
 
@@ -93,8 +89,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
         Route::post('two-factor/disable', 'TwoFactorController@disable')->name('two-factor.disable');
     });
-
-
 
     /**
      * User Management
@@ -134,11 +128,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::resource('permissions', 'PermissionsController')->middleware('permission:permissions.manage');
     });
 
-
     /**
      * Settings
      */
-
     Route::get('settings', 'SettingsController@general')->name('settings.general')
         ->middleware('permission:settings.general');
 
@@ -180,7 +172,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     /**
      * Activity Log
      */
-
     Route::get('activity', 'ActivityController@index')->name('activity.index')
         ->middleware('permission:users.activity');
 
@@ -207,4 +198,17 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
             'uses' => 'ServicesController@getServices'
         ]);
     });
+
+    /**
+     * Cars Management & Orders
+     */
+    Route::resource('orders', 'CarsManagementController');
+    Route::get('orders/datatable/tborders', [
+        'as' => 'get.orders',
+        'uses' => 'CarsManagementController@getOrders'
+    ]);
+    Route::get('orders/html/{index}', [
+        'as' => 'orders.html.details',
+        'uses' => 'CarsManagementController@addDetail'
+    ]);
 });

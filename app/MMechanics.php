@@ -11,7 +11,7 @@ class MMechanics extends Model
 
     protected $table = "m_mechanics";
 
-    protected $fillable = ['user_id'];
+    protected $fillable = ['user_id', 'job_status'];
 
     protected $guarded = [];
 
