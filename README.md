@@ -13,6 +13,20 @@
 # Backend Access
 - This backend feature also can use it to input the data as well.
 - The link for backend : http:localhost:8000/login
+
+Admin Role
 - Use this credentials for admin role:
 - username: admin
 - password: admin123
+
+User Role
+- Use this credentials for user role:
+- username: chandra / arsya
+- password: password123
+
+Mechanics Role
+- Use this credentials for user role:
+- username: john.wick / keanu
+- password: password123
+
+# API Documentation
