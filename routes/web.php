@@ -211,4 +211,13 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         'as' => 'orders.html.details',
         'uses' => 'CarsManagementController@addDetail'
     ]);
+
+    /**
+     * Jobs Management
+     */
+    Route::resource('jobs', 'JobsManagemenController')->only(['index', 'show']);
+    Route::get('jobs/datatable/tbjobs', [
+        'as' => 'get.jobs',
+        'uses' => 'JobsManagemenController@getJobs'
+    ]);
 });

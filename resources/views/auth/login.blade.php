@@ -18,7 +18,7 @@
                 </a>
                 <!--end::Aside header-->
                 <!--begin::Aside title-->
-                <h3 class="font-weight-bolder text-center font-size-h4 font-size-h1-lg" style="color: #986923;">Parking Booking</h3>
+                <h3 class="font-weight-bolder text-center font-size-h4 font-size-h1-lg" style="color: #986923;">Car Workshop</h3>
                 <!--end::Aside title-->
             </div>
             <!--end::Aside Top-->

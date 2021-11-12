@@ -13,6 +13,7 @@ use Vanguard\Support\Plugins\Dashboard\Widgets\UserActions;
 use \Vanguard\UserActivity\Widgets\ActivityWidget;
 use Vanguard\Support\Plugins\MasterData;
 use Vanguard\Support\Plugins\CarsManagement;
+use Vanguard\Support\Plugins\JobsManagement;
 
 class VanguardServiceProvider extends BaseVanguardServiceProvider
 {
@@ -28,6 +29,7 @@ class VanguardServiceProvider extends BaseVanguardServiceProvider
             /* Master Data */
             MasterData::class,
             CarsManagement::class,
+            JobsManagement::class,
             \Vanguard\Support\Plugins\Users::class,
             \Vanguard\UserActivity\UserActivity::class,
             \Vanguard\Support\Plugins\RolesAndPermissions::class,
